@@ -1,13 +1,18 @@
 package com.test.task.controller;
 
-import com.test.task.repository.NewsRepository;
 import com.test.task.domain.News;
+import com.test.task.repository.NewsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Objects;
@@ -21,27 +26,32 @@ public class NewsController {
     private NewsRepository newsRepository;
 
     @GetMapping()
-    public ResponseEntity<List<News>> getNews(@Nullable @RequestParam String filter, @Nullable @RequestParam String value) {
-        List<News> news = newsRepository.findAll();
+    public ResponseEntity<Page<News>> getNews(@RequestParam(required = false, defaultValue = "") String filter,
+                                              @RequestParam(required = false, defaultValue = "") String value,
+                                              @PageableDefault(sort = "title") Pageable pageable) {
+        Page<News> newsPage = null;
         if ("topic".equalsIgnoreCase(filter) && Objects.nonNull(value)) {
-            news = news.stream().filter(m -> value.equalsIgnoreCase(m.getTopic())).toList();
+            newsPage = newsRepository.findAllByTopic(value, pageable);
         }
         if ("source".equalsIgnoreCase(filter) && Objects.nonNull(value)) {
-            news = news.stream().filter(m -> value.equalsIgnoreCase(m.getSource())).toList();
+            newsPage = newsRepository.findAllBySource(value, pageable);
         }
-        return ResponseEntity.ok(news);
+        if (filter.isBlank()) {
+            newsPage = newsRepository.findAll(pageable);
+        }
+        return ResponseEntity.ok(newsPage);
     }
 
-    @GetMapping("/source")
+    @GetMapping("/sources")
     public ResponseEntity<List<String>> getAllSource() {
-        List<String> sources = newsRepository.findAll().stream().map(n -> n.getSource()).distinct().toList();
-        return ResponseEntity.ok(sources);
+        List<String> allSources = newsRepository.getAllSources();
+        return ResponseEntity.ok(allSources);
     }
 
-    @GetMapping("/topic")
+    @GetMapping("/topics")
     public ResponseEntity<List<String>> getAllTopic() {
-        List<String> sources = newsRepository.findAll().stream().map(n -> n.getTopic()).distinct().toList();
-        return ResponseEntity.ok(sources);
+        List<String> allTopics = newsRepository.getAllTopics();
+        return ResponseEntity.ok(allTopics);
     }
 
 
