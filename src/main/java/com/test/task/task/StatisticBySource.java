@@ -17,14 +17,13 @@ import java.util.concurrent.Executors;
 
 @Component
 public class StatisticBySource {
-
     private static int sizeThreadPool = 4;
     private static ExecutorService threadPool = Executors.newFixedThreadPool(sizeThreadPool);
 
     @Autowired
     private NewsRepository newsRepository;
 
-    @Scheduled(cron = "*/10 * * ? * *")
+    @Scheduled(cron = "${app.setting.cron-template}")
     public void saveStatistic() {
         List<String> allSources = newsRepository.getAllSources();
         for (String source :
