@@ -4,6 +4,8 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+info_by_source/
+
 *.csv
 
 ### IntelliJ IDEA ###

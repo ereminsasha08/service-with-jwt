@@ -1,0 +1,39 @@
+version: '3.1'
+services:
+  db:
+    image: postgres:13
+    container_name: "postgres_db"
+    ports:
+      - "5432:5432"
+    networks:
+      - news_network
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - "./data/db:/var/lib/postgres"
+  my_app:
+    image: openjdk:17
+    container_name: "SB_News"
+    restart: always
+    ports:
+      - "8080:8080"
+    networks:
+      - news_network
+    environment:
+#      - cron-template=*/1 * * ? * *
+      - spring.datasource.url=jdbc:postgresql://postgres_db:5432/postgres
+    volumes:
+      - "./target/:/app"
+      - "./info_by_source:/info_by_source"
+    command: [ 'java', '-jar', '/app/task-0.0.1-SNAPSHOT.jar' ]
+networks:
+  news_network:
+
+
+
+
+
+
+
+

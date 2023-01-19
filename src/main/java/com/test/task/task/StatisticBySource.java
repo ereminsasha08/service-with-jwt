@@ -1,6 +1,7 @@
 package com.test.task.task;
 
 import com.test.task.repository.NewsRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Component
+@Slf4j
 public class StatisticBySource {
     private static int sizeThreadPool = 4;
     private static ExecutorService threadPool = Executors.newFixedThreadPool(sizeThreadPool);
@@ -44,12 +46,13 @@ public class StatisticBySource {
         public void run() {
             List<NewsRepository.TopicCount> topicCounts = newsRepository.countTotalTopicBySource(source);
 
-            Path sourceFile = Path.of(source + ".csv");
+            Path sourceFile = Path.of("info_by_source/" + source + ".csv");
             if (!Files.exists(sourceFile)) {
                 try {
+                    Files.createDirectory(Path.of("info_by_source"));
                     Files.createFile(sourceFile);
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    log.error("Error creating {} file", sourceFile);
                 }
             }
             StringBuilder stringBuilder;
