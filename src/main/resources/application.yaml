@@ -11,12 +11,10 @@ spring:
   flyway:
     locations: classpath:migration
   jpa:
-    hibernate:
-      ddl-auto: create
     show-sql: true
+
 app:
   setting:
     cron-template: ${cron-template:*/10 * * ? * *}
-server:
-  port: 8081
+
 

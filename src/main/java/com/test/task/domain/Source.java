@@ -20,7 +20,7 @@ public class Source extends AbstractNamedEntity {
         this.name = name;
     }
     @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "source_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private List<News> news;

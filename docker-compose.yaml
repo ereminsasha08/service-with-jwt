@@ -10,10 +10,8 @@ services:
     environment:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
-    volumes:
-      - "./data/db:/var/lib/postgres"
   my_app:
-    image: openjdk:17
+    image: pratikdas/task:v1 #чтобы получить образ mvn spring-boot:build-image
     container_name: "SB_News"
     restart: always
     ports:
@@ -24,9 +22,7 @@ services:
 #      - cron-template=*/1 * * ? * *
       - spring.datasource.url=jdbc:postgresql://postgres_db:5432/postgres
     volumes:
-      - "./target/:/app"
-      - "./info_by_source:/info_by_source"
-    command: [ 'java', '-jar', '/app/task-0.0.1-SNAPSHOT.jar' ]
+      - "./info_by_source:/info_by_source" #не копируется
 networks:
   news_network:
 
