@@ -34,8 +34,9 @@ public class NewsController {
         return ResponseEntity.ok(allTopics);
     }
 
-    @GetMapping("/filter/{filter}")
-    public Page<News> filterNews(@PathVariable String filter, @RequestParam(required = false, defaultValue = "") String value,
+    @GetMapping("/filter")
+    public Page<News> filterNews(@RequestParam(required = false, defaultValue = "") String filter,
+                                 @RequestParam(required = false, defaultValue = "") String value,
                                  @PageableDefault(sort = "title") Pageable pageable) {
         Page<News> filterNewsPage = null;
         if ("topic".equalsIgnoreCase(filter)) {

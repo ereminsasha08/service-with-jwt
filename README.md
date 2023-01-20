@@ -1,14 +1,14 @@
 ## Запуск и функционал
-1. В корневой папке проекта выполниь команду mvn spring-boot:build-image
+1. Собрать проект
 2. Запустить docker-compose
 3. Получить токен черз запрос POST http://localhost/api/auth/login (Пустое тело запроса, даст права неавторизованного пользователя)
 4. Использовать accessToken из тело ответа для авторизации в новостном API (В postman Authorization - Bearer Token, через  curl --header "Authorization: Bearer accessToken" -X GET 'http://localhost:8080/api/news')
 5. Доступные конечные точки
 - GET api/news - все новости с пагинацией
-- GET api/news/filter/{filter}?value= параметр filter={"topic", "source"}, значения фильтра value={Тема или источник новости}
+- GET api/news/filter?filter=&value= параметр filter={"topic", "source"}, значения фильтра value={Тема или источник новости}
 - GET api/news/topics - список всех тем новостей
 - GET api/sources - список всех источников новостей
-6. Статистичиская выгрузка происходит раз в 10 секунд по пути ./info_by_source
+6. Статистичиская выгрузка происходит раз в 10 секунд по пути /info_by_source 
 
 ### ТЗ. Spring-boot приложение для отображения новостных данных.
 

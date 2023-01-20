@@ -11,7 +11,7 @@ services:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
   my_app:
-    image: pratikdas/task:v1 #чтобы получить образ выполнить: "mvn spring-boot:build-image"
+    build: .
     container_name: "SB_News"
     restart: always
     ports:
@@ -22,7 +22,7 @@ services:
 #      - cron-template=*/1 * * ? * *
       - spring.datasource.url=jdbc:postgresql://postgres_db:5432/postgres
     volumes:
-#      - "./info_by_source:/info_by_source" не работает
+      - "./info_by_source:/info_by_source"
 networks:
   news_network:
 
