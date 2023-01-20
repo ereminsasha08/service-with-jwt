@@ -1,7 +1,8 @@
 package com.test.task.controller;
 
 import com.test.task.domain.News;
-import com.test.task.repository.NewsRepository;
+import com.test.task.domain.Topic;
+import com.test.task.service.NewsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,7 +22,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class NewsController {
     @Autowired
-    private NewsRepository newsRepository;
+    private NewsService newsService;
 
     @GetMapping()
     public ResponseEntity<Page<News>> getNews(@RequestParam(required = false, defaultValue = "") String filter,
@@ -29,28 +30,23 @@ public class NewsController {
                                               @PageableDefault(sort = "title") Pageable pageable) {
         Page<News> newsPage = null;
         if ("topic".equalsIgnoreCase(filter) && Objects.nonNull(value)) {
-            newsPage = newsRepository.findAllByTopic(value, pageable);
+//            newsPage = newsRepository.findAllByTopic(value, pageable);
         }
         if ("source".equalsIgnoreCase(filter) && Objects.nonNull(value)) {
-            newsPage = newsRepository.findAllBySource(value, pageable);
+//            newsPage = newsRepository.findAllBySource(value, pageable);
         }
         if (filter.isBlank()) {
-            newsPage = newsRepository.findAll(pageable);
+//            newsPage = newsRepository.findAll(pageable);
         }
         return ResponseEntity.ok(newsPage);
     }
 
-//    @GetMapping("/sources")
-//    public ResponseEntity<List<String>> getAllSource() {
-//        List<String> allSources = newsRepository.getAllSources();
-//        return ResponseEntity.ok(allSources);
-//    }
-//
-//    @GetMapping("/topics")
-//    public ResponseEntity<List<String>> getAllTopic() {
-//        List<String> allTopics = newsRepository.getAllTopics();
-//        return ResponseEntity.ok(allTopics);
-//    }
-//
+
+    @GetMapping("/topics")
+    public ResponseEntity<List<Topic>> getAllTopic() {
+        List<Topic> allTopics = newsService.getAllTopics();
+        return ResponseEntity.ok(allTopics);
+    }
+
 
 }
