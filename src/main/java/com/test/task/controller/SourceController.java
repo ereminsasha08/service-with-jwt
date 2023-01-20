@@ -1,7 +1,6 @@
 package com.test.task.controller;
 
 import com.test.task.domain.Source;
-import com.test.task.repository.SourceRepository;
 import com.test.task.service.SourceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,7 @@ public class SourceController {
 
     @GetMapping
     public ResponseEntity<List<Source>> getAllSource() {
-        List<Source> allSources = sourceService.getSources();
+        List<Source> allSources = sourceService.findAll();
         return ResponseEntity.ok(allSources);
     }
 }

@@ -20,17 +20,14 @@ public interface NewsRepository extends JpaRepository<News, String> {
 
     @Query("SELECT DISTINCT n.topic FROM News n")
     List<Topic> getAllTopics();
-//
-//    @Query("SELECT DISTINCT n.source FROM News n")
-//    List<String> getAllSources();
 
-//    @Query("SELECT n.topic AS newsTopic, COUNT(n.topic) AS totalTopic "
-//            + "FROM News n WHERE n.source=:source GROUP BY n.topic")
-//    List<TopicCount> countTotalTopicBySource(String source);
-//
-//    interface TopicCount {
-//        String getNewsTopic();
-//
-//        Integer getTotalTopic();
-//    }
+    @Query("SELECT n.topic.titleTopic AS newsTopic, COUNT(n.topic) AS totalTopic "
+            + "FROM News n WHERE n.source.name=:sourceName GROUP BY n.topic")
+    List<TopicCount> countTotalTopicBySource(String sourceName);
+
+    interface TopicCount {
+        String getNewsTopic();
+
+        Integer getTotalTopic();
+    }
 }

@@ -13,7 +13,7 @@ public class SourceService {
     @Autowired
     private SourceRepository sourceRepository;
 
-    public List<Source> getSources() {
+    public List<Source> findAll() {
         return sourceRepository.findAll();
     }
 

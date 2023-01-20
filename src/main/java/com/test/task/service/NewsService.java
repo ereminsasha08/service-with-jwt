@@ -35,4 +35,8 @@ public class NewsService {
     public Page<News> findAllBySource(String sourceName, Pageable pageable) {
         return newsRepository.findAllBySource(sourceName, pageable);
     }
+
+    public List<NewsRepository.TopicCount> countTotalTopicBySource(String sourceName) {
+        return newsRepository.countTotalTopicBySource(sourceName);
+    }
 }
