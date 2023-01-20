@@ -4,13 +4,19 @@ jwt:
     refresh: zL1HB3Pch05Avfynovxrf/kpF9O2m4NCWKJUjEp27s9J2jEG3ifiKCGylaZ8fDeoONSTJP/wAzKawB8F9rOMNg==
 spring:
   datasource:
-    url: ${spring.datasource.url:jdbc:postgresql://localhost:5432/postgres}
+#    url: ${spring.datasource.url:jdbc:postgresql://localhost:5432/postgres}
+    url: jdbc:postgresql://localhost:5432/postgres
     username: user
     password: password
   flyway:
     locations: classpath:migration
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
 app:
   setting:
     cron-template: ${cron-template:*/10 * * ? * *}
-
+server:
+  port: 8081
 
