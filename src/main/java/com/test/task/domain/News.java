@@ -18,9 +18,16 @@ public class News extends AbstractBaseEntity{
     private String title;
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "source_id", nullable = false)
+    @JoinColumn( name = "source_id", nullable = false)
     @Fetch(FetchMode.SELECT)
     private Source source;
     @Embedded
+    @NotNull
     private Topic topic;
+
+    public News(String title, Source source, Topic topic) {
+        this.title = title;
+        this.source = source;
+        this.topic = topic;
+    }
 }
