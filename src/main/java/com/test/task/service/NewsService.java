@@ -2,6 +2,7 @@ package com.test.task.service;
 
 import com.test.task.domain.News;
 import com.test.task.domain.Topic;
+import com.test.task.dto.NewsDto;
 import com.test.task.repository.NewsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,16 +25,16 @@ public class NewsService {
         return newsRepository.getAllTopics();
     }
 
-    public Page<News> findAll(Pageable pageable) {
-        return newsRepository.findAll(pageable);
+    public Page<NewsDto> findAll(Pageable pageable) {
+        return newsRepository.findAll(pageable).map(NewsDto::new);
     }
 
-    public Page<News> findAllByTopic(String topicTitle, Pageable pageable) {
-        return newsRepository.findAllByTopic(topicTitle + '%', pageable);
+    public Page<NewsDto> findAllByTopic(String topicTitle, Pageable pageable) {
+        return newsRepository.findAllByTopic(topicTitle + '%', pageable).map(NewsDto::new);
     }
 
-    public Page<News> findAllBySource(String sourceName, Pageable pageable) {
-        return newsRepository.findAllBySource(sourceName + '%', pageable);
+    public Page<NewsDto> findAllBySource(String sourceName, Pageable pageable) {
+        return newsRepository.findAllBySource(sourceName + '%', pageable).map(NewsDto::new);
     }
 
     public List<NewsRepository.TopicCount> countTotalTopicBySource(String sourceName) {
