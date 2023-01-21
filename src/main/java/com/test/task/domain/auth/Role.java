@@ -1,4 +1,4 @@
-package com.test.task.domain;
+package com.test.task.domain.auth;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

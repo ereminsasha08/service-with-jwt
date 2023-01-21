@@ -1,6 +1,6 @@
 package com.test.task.task;
 
-import com.test.task.domain.Source;
+import com.test.task.domain.news.Source;
 import com.test.task.repository.NewsRepository;
 import com.test.task.service.NewsService;
 import com.test.task.service.SourceService;
@@ -63,18 +63,18 @@ public class StatisticBySource {
                     log.error("Error creating {} file", sourceFile);
                 }
             }
-            StringBuilder stringBuilder;
+            StringBuilder stringBuilder = new StringBuilder();
+            ;
+            for (NewsRepository.TopicCount topic :
+                    topicCounts) {
+                stringBuilder.append(topic.getNewsTopic());
+                stringBuilder.append(",");
+                stringBuilder.append(topic.getTotalTopic());
+                stringBuilder.append("\n");
+            }
             try (FileOutputStream os = new FileOutputStream(sourceFile.toFile())) {
                 os.write("Тема,Количество новостей\n".getBytes());
-                for (NewsRepository.TopicCount topic :
-                        topicCounts) {
-                    stringBuilder = new StringBuilder();
-                    stringBuilder.append(topic.getNewsTopic());
-                    stringBuilder.append(",");
-                    stringBuilder.append(topic.getTotalTopic());
-                    stringBuilder.append("\n");
-                    os.write(stringBuilder.toString().getBytes());
-                }
+                os.write(stringBuilder.toString().getBytes());
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             } catch (IOException e) {

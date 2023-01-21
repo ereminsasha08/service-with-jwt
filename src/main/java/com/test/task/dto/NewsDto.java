@@ -1,6 +1,6 @@
 package com.test.task.dto;
 
-import com.test.task.domain.News;
+import com.test.task.domain.news.News;
 import lombok.Getter;
 
 @Getter

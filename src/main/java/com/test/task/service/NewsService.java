@@ -1,25 +1,38 @@
 package com.test.task.service;
 
-import com.test.task.domain.News;
-import com.test.task.domain.Topic;
+import com.test.task.domain.news.Topic;
 import com.test.task.dto.NewsDto;
+import com.test.task.exception.NotFoundFilterException;
 import com.test.task.repository.NewsRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.BiFunction;
 
 @Service
+@RequiredArgsConstructor
 public class NewsService {
+    final private NewsRepository newsRepository;
 
-    @Autowired
-    private NewsRepository newsRepository;
+    private Map<String, BiFunction<String, Pageable, Page<NewsDto>>> filters = new HashMap<>();
 
-    public void save(News news) {
-        newsRepository.save(news);
+    {
+        filters.put("topic", this::findAllByTopic);
+        filters.put("source", this::findAllBySource);
     }
+
+    public Page<NewsDto> filter(String filter, String value, Pageable pageable) {
+        Optional<BiFunction<String, Pageable, Page<NewsDto>>> functionFilter = Optional.of(filters.get(filter.toLowerCase()));
+        Page<NewsDto> filteredNews = functionFilter.orElseThrow(() -> new NotFoundFilterException(filter)).apply(value, pageable);
+        return filteredNews;
+    }
+
 
     public List<Topic> getAllTopics() {
         return newsRepository.getAllTopics();

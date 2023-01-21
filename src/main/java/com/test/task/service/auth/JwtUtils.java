@@ -1,7 +1,7 @@
-package com.test.task.service;
+package com.test.task.service.auth;
 
-import com.test.task.domain.JwtAuthentication;
-import com.test.task.domain.Role;
+import com.test.task.domain.auth.JwtAuthentication;
+import com.test.task.domain.auth.Role;
 import io.jsonwebtoken.Claims;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

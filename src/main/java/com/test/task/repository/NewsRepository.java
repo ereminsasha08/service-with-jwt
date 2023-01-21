@@ -1,7 +1,7 @@
 package com.test.task.repository;
 
-import com.test.task.domain.News;
-import com.test.task.domain.Topic;
+import com.test.task.domain.news.News;
+import com.test.task.domain.news.Topic;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,6 +12,7 @@ import java.util.List;
 public interface NewsRepository extends JpaRepository<News, String> {
 
     Page<News> findAll(Pageable pageable);
+
     @Query("SELECT n from News n where n.source.name like :source")
     Page<News> findAllBySource(String source, Pageable pageable);
 

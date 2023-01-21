@@ -1,13 +1,14 @@
-package com.test.task.service;
+package com.test.task.service.auth;
 
-import com.test.task.domain.JwtAuthentication;
-import com.test.task.domain.JwtRequest;
-import com.test.task.domain.JwtResponse;
-import com.test.task.domain.User;
+import com.test.task.domain.auth.JwtAuthentication;
+import com.test.task.domain.auth.JwtRequest;
+import com.test.task.domain.auth.JwtResponse;
+import com.test.task.domain.auth.User;
+import com.test.task.exception.AuthException;
+import com.test.task.service.UserService;
 import io.jsonwebtoken.Claims;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import com.test.task.exception.AuthException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 

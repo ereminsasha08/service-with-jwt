@@ -1,8 +1,8 @@
 package com.test.task.filter;
 
-import com.test.task.domain.JwtAuthentication;
-import com.test.task.service.JwtProvider;
-import com.test.task.service.JwtUtils;
+import com.test.task.domain.auth.JwtAuthentication;
+import com.test.task.service.auth.JwtProvider;
+import com.test.task.service.auth.JwtUtils;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

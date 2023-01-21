@@ -1,4 +1,4 @@
-package com.test.task.domain;
+package com.test.task.domain.news;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

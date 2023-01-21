@@ -1,7 +1,7 @@
 ## Запуск и функционал
 1. Собрать проект
 2. Запустить docker-compose
-3. Получить токен черз запрос POST http://localhost/api/auth/login (Пустое тело запроса, даст права неавторизованного пользователя)
+3. Получить токен черз запрос POST http://localhost/api/auth/login (В теле запроса должны быть два поля login и password)
 4. Использовать accessToken из тело ответа для авторизации в новостном API (В postman Authorization - Bearer Token, через  curl --header "Authorization: Bearer accessToken" -X GET 'http://localhost:8080/api/news')
 5. Доступные конечные точки
 - GET api/news - все новости с пагинацией

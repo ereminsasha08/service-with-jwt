@@ -1,4 +1,4 @@
-package com.test.task.domain;
+package com.test.task.domain.abstractclass;
 
 import lombok.Getter;
 import lombok.Setter;

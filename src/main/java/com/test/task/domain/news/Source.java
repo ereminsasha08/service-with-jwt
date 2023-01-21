@@ -1,7 +1,7 @@
-package com.test.task.domain;
+package com.test.task.domain.news;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
+import com.test.task.domain.abstractclass.AbstractNamedEntity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
@@ -16,9 +16,10 @@ import java.util.List;
 @NoArgsConstructor
 public class Source extends AbstractNamedEntity {
 
-    public Source(String name){
+    public Source(String name) {
         this.name = name;
     }
+
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "source_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
