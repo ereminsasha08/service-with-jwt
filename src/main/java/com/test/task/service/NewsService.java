@@ -1,5 +1,6 @@
 package com.test.task.service;
 
+import com.test.task.domain.news.News;
 import com.test.task.domain.news.Topic;
 import com.test.task.dto.NewsDto;
 import com.test.task.exception.NotFoundFilterException;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,14 +30,18 @@ public class NewsService {
     }
 
     public Page<NewsDto> filter(String filter, String value, Pageable pageable) {
-        Optional<BiFunction<String, Pageable, Page<NewsDto>>> functionFilter = Optional.of(filters.get(filter.toLowerCase()));
+        Optional<BiFunction<String, Pageable, Page<NewsDto>>> functionFilter = Optional.ofNullable(filters.get(filter.toLowerCase()));
         Page<NewsDto> filteredNews = functionFilter.orElseThrow(() -> new NotFoundFilterException(filter)).apply(value, pageable);
         return filteredNews;
     }
 
 
-    public List<Topic> getAllTopics() {
-        return newsRepository.getAllTopics();
+    public List<Topic> getTopics(Pageable pageable) {
+        return newsRepository.findAll(pageable).stream()
+                .parallel()
+                .map(News::getTopic)
+                .distinct()
+                .collect(Collectors.toList());
     }
 
     public Page<NewsDto> findAll(Pageable pageable) {

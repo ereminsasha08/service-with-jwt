@@ -20,7 +20,7 @@ public class UserService {
         this.users = List.of(
                 new User("user", "1234", "Иван", "Иванов", Collections.singleton(Role.USER)),
                 new User("admin", "12345", "Сергей", "Петров", Collections.singleton(Role.ADMIN)),
-                new User("UNAUTHORIZED", "UNAUTHORIZED", "UNAUTHORIZED", "UNAUTHORIZED", Collections.singleton(Role.UNAUTHORIZED))
+                new User("1", "1", "UNAUTHORIZED", "UNAUTHORIZED", Collections.singleton(Role.UNAUTHORIZED))
 
         );
     }

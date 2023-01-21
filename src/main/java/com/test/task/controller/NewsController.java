@@ -30,8 +30,8 @@ public class NewsController {
 
 
     @GetMapping("/topics")
-    public ResponseEntity<List<Topic>> getAllTopic() {
-        List<Topic> allTopics = newsService.getAllTopics();
+    public ResponseEntity<List<Topic>> getTopics(@PageableDefault(sort = "title") Pageable pageable) {
+        List<Topic> allTopics = newsService.getTopics(pageable);
         return ResponseEntity.ok(allTopics);
     }
 

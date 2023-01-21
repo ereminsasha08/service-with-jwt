@@ -2,8 +2,8 @@ package com.test.task.exception;
 
 public class NotFoundFilterException extends RuntimeException{
 
-
-    public NotFoundFilterException(String message) {
-        super(message);
+    private static String message = "Not found filter: ";
+    public NotFoundFilterException(String value) {
+        super(message + value);
     }
 }

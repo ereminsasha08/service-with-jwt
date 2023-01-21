@@ -26,10 +26,4 @@ public class News extends AbstractBaseEntity {
     @Embedded
     @NotNull
     private Topic topic;
-
-    public News(String title, Source source, Topic topic) {
-        this.title = title;
-        this.source = source;
-        this.topic = topic;
-    }
 }
