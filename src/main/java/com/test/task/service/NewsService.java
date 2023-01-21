@@ -29,11 +29,11 @@ public class NewsService {
     }
 
     public Page<News> findAllByTopic(String topicTitle, Pageable pageable) {
-        return newsRepository.findAllByTopic(topicTitle, pageable);
+        return newsRepository.findAllByTopic(topicTitle + '%', pageable);
     }
 
     public Page<News> findAllBySource(String sourceName, Pageable pageable) {
-        return newsRepository.findAllBySource(sourceName, pageable);
+        return newsRepository.findAllBySource(sourceName + '%', pageable);
     }
 
     public List<NewsRepository.TopicCount> countTotalTopicBySource(String sourceName) {

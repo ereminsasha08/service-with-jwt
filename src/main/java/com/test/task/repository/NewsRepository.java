@@ -12,10 +12,10 @@ import java.util.List;
 public interface NewsRepository extends JpaRepository<News, String> {
 
     Page<News> findAll(Pageable pageable);
-    @Query("SELECT n from News n where n.source.name=:source")
+    @Query("SELECT n from News n where n.source.name like :source")
     Page<News> findAllBySource(String source, Pageable pageable);
 
-    @Query("SELECT n from News n where n.topic.titleTopic=:topic")
+    @Query("SELECT n from News n where n.topic.titleTopic like :topic")
     Page<News> findAllByTopic(String topic, Pageable pageable);
 
     @Query("SELECT DISTINCT n.topic FROM News n")
