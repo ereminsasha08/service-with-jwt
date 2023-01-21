@@ -20,7 +20,7 @@ public interface NewsRepository extends JpaRepository<News, String> {
     Page<News> findAllByTopic(String topic, Pageable pageable);
 
     @Query("SELECT DISTINCT n.topic FROM News n")
-    List<Topic> getAllTopics();
+    List<Topic> getTopics();
 
     @Query("SELECT n.topic.titleTopic AS newsTopic, COUNT(n.topic) AS totalTopic "
             + "FROM News n WHERE n.source.name=:sourceName GROUP BY n.topic")
