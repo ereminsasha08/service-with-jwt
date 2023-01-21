@@ -2,6 +2,7 @@ package com.test.task.controller;
 
 import com.test.task.domain.News;
 import com.test.task.domain.Topic;
+import com.test.task.exception.NotFoundFilterException;
 import com.test.task.service.NewsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,14 +10,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 @RestController()
 @RequestMapping("/api/news")
@@ -46,13 +49,17 @@ public class NewsController {
     }
 
     @GetMapping("/filter")
-    public Page<News> filterNews(@RequestParam(required = false, defaultValue = "") String filter,
-                                 @RequestParam(required = false, defaultValue = "") String value,
-                                 @PageableDefault(sort = "title") Pageable pageable) {
+    public ResponseEntity<Page<News>> filterNews(@RequestParam(required = false, defaultValue = "") String filter,
+                                                 @RequestParam(required = false, defaultValue = "") String value,
+                                                 @PageableDefault(sort = "title") Pageable pageable) throws NotFoundFilterException {
         BiFunction<String, Pageable, Page> functionFilter = filters.get(filter.toLowerCase());
-        if (Objects.nonNull(functionFilter)) {
-            return functionFilter.apply(value, pageable);
+        try {
+            return ResponseEntity.ok(functionFilter.apply(value, pageable));
         }
-        return null;
+        catch (NullPointerException e){
+            throw new NotFoundFilterException("Not found filter: " + value);
+        }
+
     }
+
 }
