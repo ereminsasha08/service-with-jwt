@@ -2,10 +2,11 @@ package com.test.task.task;
 
 import com.test.task.domain.news.Source;
 import com.test.task.repository.NewsRepository;
-import com.test.task.service.NewsService;
+import com.test.task.repository.news.NewsRepositoryBackEndFilter;
 import com.test.task.service.SourceService;
+import com.test.task.service.StatisticService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -21,14 +22,11 @@ import java.util.concurrent.Executors;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class StatisticBySource {
 
-    @Autowired
-    private SourceService sourceService;
-
-
-    @Autowired
-    private NewsService newsService;
+    private final SourceService sourceService;
+    private final StatisticService statisticService;
     private static int sizeThreadPool = 4;
     private static ExecutorService threadPool = Executors.newFixedThreadPool(sizeThreadPool);
 
@@ -38,21 +36,21 @@ public class StatisticBySource {
         List<Source> allSources = sourceService.findAll();
         for (Source source :
                 allSources) {
-            CompletableFuture.runAsync(new SaveSourceNewsAmount(source.getName()),
+            CompletableFuture.runAsync(new SaveAmountTitleByTopicFromSourceNews(source.getName()),
                     threadPool);
         }
     }
 
-    private class SaveSourceNewsAmount implements Runnable {
+    private class SaveAmountTitleByTopicFromSourceNews implements Runnable {
         private final String sourceName;
 
-        private SaveSourceNewsAmount(String sourceName) {
+        private SaveAmountTitleByTopicFromSourceNews(String sourceName) {
             this.sourceName = sourceName;
         }
 
         @Override
         public void run() {
-            List<NewsRepository.TopicCount> topicCounts = newsService.countTotalTopicBySource(sourceName);
+            List<NewsRepository.TopicCount> topicCounts = statisticService.countTotalTopicBySource(sourceName);
 
             Path sourceFile = Path.of("info_by_source/" + sourceName + ".csv");
             if (!Files.exists(sourceFile)) {
@@ -63,18 +61,17 @@ public class StatisticBySource {
                     log.error("Error creating {} file", sourceFile);
                 }
             }
-            StringBuilder stringBuilder = new StringBuilder();
-            ;
-            for (NewsRepository.TopicCount topic :
+            StringBuilder stringBuilder = new StringBuilder("Тема,Количество новостей\n");
+            for (NewsRepositoryBackEndFilter.TopicCount topic :
                     topicCounts) {
                 stringBuilder.append(topic.getNewsTopic());
                 stringBuilder.append(",");
                 stringBuilder.append(topic.getTotalTopic());
                 stringBuilder.append("\n");
             }
+            byte[] bytes = stringBuilder.toString().getBytes();
             try (FileOutputStream os = new FileOutputStream(sourceFile.toFile())) {
-                os.write("Тема,Количество новостей\n".getBytes());
-                os.write(stringBuilder.toString().getBytes());
+                os.write(bytes);
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             } catch (IOException e) {

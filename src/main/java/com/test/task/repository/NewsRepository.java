@@ -2,6 +2,8 @@ package com.test.task.repository;
 
 import com.test.task.domain.news.News;
 import com.test.task.domain.news.Topic;
+import com.test.task.exception.NotSupportedMethodRuntimeException;
+import com.test.task.repository.news.NewsRepositoryBackEndFilter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,20 +13,20 @@ import java.util.List;
 
 public interface NewsRepository extends JpaRepository<News, String> {
 
-    Page<News> findAll(Pageable pageable);
+    default Page<News> findAllBySource(String s, Pageable pageable) {
+        throw new NotSupportedMethodRuntimeException();
+    }
 
-    @Query("SELECT n from News n where n.source.name like :source")
-    Page<News> findAllBySource(String source, Pageable pageable);
+    default Page<News> findAllByTopic(String s, Pageable pageable) {
+        throw new NotSupportedMethodRuntimeException();
+    }
 
-    @Query("SELECT n from News n where n.topic.titleTopic like :topic")
-    Page<News> findAllByTopic(String topic, Pageable pageable);
-
-    @Query("SELECT DISTINCT n.topic FROM News n")
-    List<Topic> getTopics();
-
+    default List<Topic> getTopics() {
+        throw new NotSupportedMethodRuntimeException();
+    }
     @Query("SELECT n.topic.titleTopic AS newsTopic, COUNT(n.topic) AS totalTopic "
             + "FROM News n WHERE n.source.name=:sourceName GROUP BY n.topic")
-    List<TopicCount> countTotalTopicBySource(String sourceName);
+    List<NewsRepositoryBackEndFilter.TopicCount> countTotalTopicBySource(String sourceName);
 
     interface TopicCount {
         String getNewsTopic();

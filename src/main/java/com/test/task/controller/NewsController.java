@@ -3,8 +3,7 @@ package com.test.task.controller;
 import com.test.task.domain.news.Topic;
 import com.test.task.dto.NewsDto;
 import com.test.task.service.NewsService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
@@ -17,14 +16,17 @@ import java.util.List;
 
 @RestController()
 @RequestMapping("/api/news")
-@RequiredArgsConstructor
 public class NewsController {
 
     final private NewsService newsService;
 
+    public NewsController(@Qualifier(value = "newsServiceBdFilter") NewsService newsService) {
+        this.newsService = newsService;
+    }
+
     @GetMapping()
-    public ResponseEntity<Page<NewsDto>> getNews(@PageableDefault(sort = "title") Pageable pageable) {
-        Page<NewsDto> newsPage = newsService.findAll(pageable);
+    public ResponseEntity<List<NewsDto>> getNews(@PageableDefault(sort = "title") Pageable pageable) {
+        List<NewsDto> newsPage = newsService.findAll(pageable);
         return ResponseEntity.ok(newsPage);
     }
 
@@ -36,10 +38,10 @@ public class NewsController {
     }
 
     @GetMapping("/filter")
-    public ResponseEntity<Page<NewsDto>> filterNews(@RequestParam(required = false, defaultValue = "") String filter,
+    public ResponseEntity<List<NewsDto>> filterNews(@RequestParam(required = false, defaultValue = "") String filter,
                                                     @RequestParam(required = false, defaultValue = "") String value,
                                                     @PageableDefault(sort = "title") Pageable pageable) {
-        Page<NewsDto> newsFiltered = newsService.filter(filter, value, pageable);
+        List<NewsDto> newsFiltered = newsService.filter(filter, value, pageable);
         return ResponseEntity.ok(newsFiltered);
 
     }
